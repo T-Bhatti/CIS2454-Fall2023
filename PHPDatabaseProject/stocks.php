@@ -1,5 +1,8 @@
 <?php
-    
+ 
+
+
+  
 try {
     require_once 'models/database.php';
     require_once 'models/stocks.php';
@@ -13,15 +16,19 @@ try {
     if ( $action == "insert_or_update" && $symbol != "" && $name != "" && $current_price != 0){
         $insert_or_update = filter_input(INPUT_POST, 'insert_or_update');
         
+        $stock = new Stock($symbol, $name, $current_price);
+        
         if ( $insert_or_update == "insert"){     
-            insert_stock($symbol, $name, $current_price);
+            insert_stock($stock);
         } else if ( $insert_or_update == "update"){
-            update_stock($symbol, $name, $current_price);
+            update_stock($stock);
         }
         
         header("Location: stocks.php");
     } else if ($action == "delete" && $symbol != "" ){
-        delete_stock($symbol);
+        // name and current price don't matter for delete
+        $stock = new Stock($symbol, "", 0);
+        delete_stock($stock);
         header("Location: stocks.php");
     } 
     else if ( $action != "" ){
@@ -40,5 +47,3 @@ try {
 }
 
 ?>
-
-
